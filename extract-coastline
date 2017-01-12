@@ -1,0 +1,15 @@
+#!/bin/bash
+
+rawdir=/mnt/src/Working/Data/OSM/Raw
+processeddir=/mnt/src/Working/Data/OSM/Processed
+
+region=$1
+
+echo filtering coastline...
+osmcoastline/osmcoastline_filter $rawdir/planet-latest.osm.pbf -o $rawdir/planet-coastline.osm.pbf
+#echo converting to xml...
+#osmconvert planet-coastline.osm.pbf > $processeddir/planet-coastline.osm
+echo building database...
+osmcoastline/osmcoastline -o $rawdir/planet-complete.db $rawdir/planet-coastline.osm.pbf
+rm $rawdir/planet-coastline.osm.pbf
+

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [ $# -ne 1 ] ; then
+	echo usage: $0 adminlevel
+	echo eg: $0 2
+	echo
+	echo extracts all tags with admin_level=adminlevel
+	echo outputs processed/planet-admin-level-\[adminlevel\].osm
+	exit 1
+fi
+
+level=$1
+
+echo "Filtering admin level $level"
+osmfilter raw/planet-latest.o5m --drop-author --keep="boundary=administrative admin_level=$level" -o=planet-admin-level-$level.o5m
+
+echo "Converting to .osm"
+if osmconvert planet-admin-level-$level.o5m --out-osm > processed/planet-admin-level-$level.osm ; then
+	rm planet-admin-level-$level.o5m
+fi
+
+echo "Done."
